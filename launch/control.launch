@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<launch>
+
+
+	<!-- Arguments for which controller type to utilize -->
+	<arg name="gripper_enabled" default="true" />
+	<arg name="control" default="position" doc="Which controller type to use" />
+	<arg name="full_arm" default="true" doc="Control full arm?" />
+	<arg name="tek4030" default="$(arg tek4030)" />
+
+
+	<!-- Load joint controller configurations from YAML file to parameter server -->
+	<rosparam if="$(eval control == 'position')"
+		file="$(find crustcrawler_controllers)/config/crustcrawler_position.yaml" command="load"/>
+	<rosparam if="$(eval control == 'velocity')"
+		file="$(find crustcrawler_controllers)/config/crustcrawler_velocity.yaml" command="load"/>
+	<rosparam if="$(eval control == 'effort')"
+		file="$(find crustcrawler_controllers)/config/crustcrawler_effort.yaml" command="load"/>
+	<rosparam if="$(eval control == 'trajectory' and full_arm)"
+		file="$(find crustcrawler_controllers)/config/crustcrawler_trajectory.yaml" command="load"/>
+	<rosparam if="$(eval control == 'trajectory' and not full_arm)"
+		file="$(find crustcrawler_controllers)/config/crustcrawler_trajectory_small.yaml" command="load"/>
+
+
+	<!-- load the control for individual controllers-->
+	<node if="$(eval control != 'trajectory' and full_arm)"
+		name="controller_spawner" pkg="controller_manager" type="spawner"
+		respawn="false" output="screen" ns="/crustcrawler"
+		args="joint_state_controller
+					joint1_controller
+					joint2_controller
+					joint3_controller
+					joint4_controller
+					joint5_controller
+					joint6_controller"/>
+
+	<node if="$(eval control != 'trajectory' and not full_arm)"
+		name="controller_spawner" pkg="controller_manager" type="spawner"
+		respawn="false" output="screen" ns="/crustcrawler"
+		args="joint_state_controller
+					joint1_controller
+					joint2_controller
+					joint3_controller"/>
+
+	<node if="$(eval control == 'trajectory')"
+		name="controller_spawner" pkg="controller_manager" type="spawner"
+		respawn="false" output="screen" ns="/crustcrawler"
+		args="joint_state_controller
+		controller"/>
+
+
+	<!-- Load control for trajectory following -->
+	<node if="$(eval control == 'trajectory')"
+		name="controller_spawner" pkg="controller_manager" type="spawner"
+		respawn="false" output="screen" ns="/crustcrawler"
+		args="joint_state_controller controller">
+	</node>
+
+
+	<!-- convert joint states to TF transforms for rviz, etc -->
+	<node name="robot_state_publisher" pkg="robot_state_publisher"
+		type="robot_state_publisher" respawn="false" output="screen">
+		<remap from="/joint_states" to="/crustcrawler/joint_states" />
+	</node>
+
+
+</launch>

@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<launch>
+
+  <!-- Load setpoint node for publishing desired values -->
+  <node name="setpoint_node" pkg="crustcrawler_controllers" type="setpoint_node" output="screen" ns="/crustcrawler" />
+
+
+  <!-- Load overall controller -->
+  <node name="pd_controller_w_gravity" pkg="crustcrawler_controllers" type="pd_controller_w_gravity"
+  	 respawn="false"	output="screen" ns="/crustcrawler"/>
+     <param name="Kp" value="2.0" />
+     <param name="Kd" value="0.5" />
+     <param name="upper_limit" value="5" />
+     <param name="lower_limit" value="-5" />
+     <param name="simulation" type="bool" value="$(arg simulation)" />
+
+
+	<!-- Load RQT with pre-setup GUI for PID tuning -->
+	<node name="pid_rqt" pkg="rqt_gui" type="rqt_gui" respawn="false"
+		output="screen" ns="/crustcrawler" required="true"
+		args="--perspective-file $(find crustcrawler_controllers)/launch/crustcrawler.perspective" />
+
+
+</launch>
