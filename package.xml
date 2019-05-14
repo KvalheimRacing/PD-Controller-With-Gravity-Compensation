@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>crustcrawler_controllers</name>
+  <version>0.0.0</version>
+  <description>The crustcrawler_controllers package</description>
+
+  <maintainer email="kma@todo.todo">kma</maintainer>
+  <maintainer email="eirikval@uio.no">ek</maintainer>
+
+  <license>MIT</license>
+
+  <url type="website">https://www.uio.no/studier/emner/matnat/its/TEK4030/</url>
+
+
+  <author email="eirikval@uio.no">Eirik Kvalheim</author>
+
+
+    <!-- Use buildtool_depend for build tool packages: -->
+  	<buildtool_depend>catkin</buildtool_depend>
+
+
+    <!-- Use depend for packages you need to build, export, and execute: -->
+    <depend>roslaunch</depend>
+    <depend>controller_manager</depend>
+    <!-- depend>ros_controllers</depend -->
+    <depend>robot_state_publisher</depend>
+    <depend>message_generation</depend>
+    <depend>message_runtime</depend>
+    <!-- Needed to get position and velocity of joint from Gazebo: -->
+    <depend>sensor_msgs</depend>
+    <!-- Needed for messages to publish internal joint state: -->
+    <depend>control_msgs</depend>
+    <!-- Needed for RQT gui -->
+    <depend>rqt_gui</depend>
+    <!-- Needed for secret Gazebo business -->
+    <depend>gazebo_msgs</depend>
+    <!-- Needed for messages to receive set-point: -->
+    <depend>std_msgs</depend>
+    <!-- Needed for online and GUI parameter tuning: -->
+  	<depend>dynamic_reconfigure</depend>
+    <!-- Since we have Python code we must have: -->
+  	<depend>rospy</depend>
+    <!-- Since we have C++ code we must have: -->
+  	<depend>roscpp</depend>
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>
